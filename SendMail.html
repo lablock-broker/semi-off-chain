@@ -1,0 +1,103 @@
+<html>
+  <head></head>
+  <body>
+    <div>
+      <h3>Sign Typed Data V4</h3>
+      <button type="button" id="connectButton">Connect Metamask</button><br/><br/>
+      <input type="text" id="toText" value="0xE6aD493984C98aA90D31Ef6cB90221d6a6b0Fa9d"/>
+      <input type="text" id="contentsText" value="Hello Lablock"/>
+      <button type="button" id="signTypedDataV4Button">Create Mail and Sign</button><br/><br/>
+      <button type="button" id="sendOffChainButton">Send Mail off-chain</button>
+    </div>
+    <script>
+      var data = ""
+      var signature = ""
+      
+      connectButton.addEventListener('click', function (event) {
+	  event.preventDefault();
+
+	  if (typeof window.ethereum !== 'undefined') {
+	      connectButton.disabled = true	      
+	      console.log('MetaMask is installed!');
+	      ethereum.request({ method: 'eth_requestAccounts' });
+	      connectButton.disabled = false
+	  } else {
+	      console.log('Please install MetaMask');
+	  }
+      })
+      
+      signTypedDataV4Button.addEventListener('click', function (event) {
+	  event.preventDefault();
+
+	  if (ethereum.selectedAddress === null) {
+	      console.log('Connect before sign');
+	      return;
+	  }
+	  
+	  console.log('Current Network is:', ethereum.networkVersion);
+	  console.log('Current Account is:', ethereum.selectedAddress);
+
+	  data = JSON.stringify({
+	      domain: {
+		  chainId: ethereum.networkVersion,
+		  name: 'validateMail,MailSent',
+		  verifyingContract: '0x40123681d6eaac2bf90a90Dc07534D6f2A367787',
+		  version: '1',
+	      },
+	      message: {
+		  from: ethereum.selectedAddress,
+		  to: toText.value,
+		  contents: contentsText.value
+	      },
+	      primaryType: 'Mail',
+	      types: {
+		  EIP712Domain: [
+		      { name: 'name', type: 'string' },
+		      { name: 'version', type: 'string' },
+		      { name: 'chainId', type: 'uint256' },
+		      { name: 'verifyingContract', type: 'address' },
+		  ],
+		  Mail: [
+		      { name: 'from', type: 'address' },
+		      { name: 'to', type: 'address' },
+		      { name: 'contents', type: 'string' },
+		  ],
+	      },
+	  });
+
+	  ethereum.request({
+	      method: 'eth_signTypedData_v4',
+	      params: [ethereum.selectedAddress, data]
+	  })
+	      .then((result) => {
+		  console.log('eth_signTypedData_v4 result:', result);
+		  signature = result
+	      })
+	      .catch((error) => {
+		  console.log('eth_signTypedData_v4 error:', error)
+	      })
+      });
+
+      sendOffChainButton.addEventListener('click', function (event) {
+	  event.preventDefault();
+
+	  fetch('https://lablock.ir/api/offchain', {
+	      method: 'POST',
+	      headers: {
+		  'Content-Type': 'application/json',
+	      },
+	      body: JSON.stringify({data: data, signature: signature})
+	  })
+	      .then((response) => {
+		  return;
+	      })
+	      .then((data) => {
+		  console.log('Send Success:', data);
+	      })
+	      .catch((error) => {
+		  console.error('Send Error:', error);
+	      });
+      });
+    </script>
+  </body>
+</html>
