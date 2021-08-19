@@ -103,14 +103,38 @@
 			{
 				"components": [
 					{
-						"internalType": "address",
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "wallet",
+								"type": "address"
+							}
+						],
+						"internalType": "struct Mailer.Person",
 						"name": "from",
-						"type": "address"
+						"type": "tuple"
 					},
 					{
-						"internalType": "address",
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "wallet",
+								"type": "address"
+							}
+						],
+						"internalType": "struct Mailer.Person",
 						"name": "to",
-						"type": "address"
+						"type": "tuple"
 					},
 					{
 						"internalType": "string",

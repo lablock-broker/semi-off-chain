@@ -1,5 +1,7 @@
 <html>
-  <head></head>
+  <head>
+    <title>Test Semi-Off-Chain Protocol</title>
+  </head>
   <body>
     <div>
       <h3>Sign Typed Data V4</h3>
@@ -24,7 +26,7 @@
 	  } else {
 	      console.log('Please install MetaMask');
 	  }
-      })
+      });
       
       signTypedDataV4Button.addEventListener('click', function (event) {
 	  event.preventDefault();
@@ -38,31 +40,46 @@
 	  console.log('Current Account is:', ethereum.selectedAddress);
 
 	  data = JSON.stringify({
-	      domain: {
-		  chainId: ethereum.networkVersion,
-		  name: 'validateMail,MailSent',
-		  verifyingContract: '0x40123681d6eaac2bf90a90Dc07534D6f2A367787',
-		  version: '1',
-	      },
-	      message: {
-		  from: ethereum.selectedAddress,
-		  to: toText.value,
-		  contents: contentsText.value
-	      },
-	      primaryType: 'Mail',
 	      types: {
 		  EIP712Domain: [
 		      { name: 'name', type: 'string' },
 		      { name: 'version', type: 'string' },
 		      { name: 'chainId', type: 'uint256' },
 		      { name: 'verifyingContract', type: 'address' },
+		      { name: 'salt', type: 'string' }
+		  ],
+		  OffChainMessage: [
+		      { name: 'signer', type: 'address' },
+		      { name: 'method', type: 'string' },
+		      { name: 'object', type: 'Mail' }
+		  ],
+		  Person: [
+		      { name: 'name', type: 'string' },
+		      { name: 'wallet', type: 'address' }
 		  ],
 		  Mail: [
-		      { name: 'from', type: 'address' },
-		      { name: 'to', type: 'address' },
-		      { name: 'contents', type: 'string' },
-		  ],
+		      { name: 'from', type: 'Person' },
+		      { name: 'to', type: 'Person' },
+		      { name: 'contents', type: 'string' }
+		  ]
 	      },
+	      primaryType: 'OffChainMessage',
+	      domain: {
+		  name: 'MailSent',
+		  version: '1',
+		  chainId: '0x' + parseInt(ethereum.networkVersion).toString(16),
+		  verifyingContract: '0xa09e51634d0A2d5Aae50a017D3dE5fbfDe91478E',
+		  salt: '0123456789'
+	      },
+	      message: {
+		  signer: ethereum.selectedAddress,
+		  method: "validateMail",
+		  object: {
+		      from: { name: "Saman", wallet: ethereum.selectedAddress },
+		      to: { name: "Mehdi", wallet: toText.value },
+		      contents: contentsText.value
+		  }
+	      }
 	  });
 
 	  ethereum.request({
@@ -81,7 +98,7 @@
       sendOffChainButton.addEventListener('click', function (event) {
 	  event.preventDefault();
 
-	  fetch('https://lablock.ir/api/offchain', {
+	  fetch('/api/offchain', {
 	      method: 'POST',
 	      headers: {
 		  'Content-Type': 'application/json',
