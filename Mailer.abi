@@ -150,13 +150,18 @@
 		"name": "validateMail",
 		"outputs": [
 			{
-				"internalType": "bool",
-				"name": "isValidated",
-				"type": "bool"
+				"internalType": "string",
+				"name": "offcahin_event",
+				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "reason",
+				"name": "from_group",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "to_group",
 				"type": "string"
 			}
 		],
