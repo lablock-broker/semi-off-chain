@@ -50,7 +50,6 @@
 		  ],
 		  OffChainMessage: [
 		      { name: 'signer', type: 'address' },
-		      { name: 'method', type: 'string' },
 		      { name: 'object', type: 'Mail' }
 		  ],
 		  Person: [
@@ -65,15 +64,14 @@
 	      },
 	      primaryType: 'OffChainMessage',
 	      domain: {
-		  name: 'MailSent',
+		  name: 'validateMail',
 		  version: '1',
 		  chainId: '0x' + parseInt(ethereum.networkVersion).toString(16),
-		  verifyingContract: '0xa09e51634d0A2d5Aae50a017D3dE5fbfDe91478E',
+		  verifyingContract: '0x37dD4dEa479dBA7BE52c9f8956e3d3fCfC8268D5',
 		  salt: '0123456789'
 	      },
 	      message: {
 		  signer: ethereum.selectedAddress,
-		  method: "validateMail",
 		  object: {
 		      from: { name: "Saman", wallet: ethereum.selectedAddress },
 		      to: { name: "Mehdi", wallet: toText.value },
