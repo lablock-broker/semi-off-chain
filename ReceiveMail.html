@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script>  
+      window.addEventListener("load", function(evt) {
+	  var output = document.getElementById("output");
+	  var input = document.getElementById("input");
+	  var ws;
+	  var print = function(message) {
+              var d = document.createElement("div");
+              d.textContent = message;
+              output.appendChild(d);
+              output.scroll(0, output.scrollHeight);
+	  };
+	  document.getElementById("open").onclick = function(evt) {
+              if (ws) {
+		  return false;
+              }
+              ws = new WebSocket("wss://lablock.ir/api/events");
+              // ws = new WebSocket("ws://localhost:9090/api/events");
+              
+              ws.onopen = function(evt) {
+		  print("OPEN");
+              }
+              ws.onclose = function(evt) {
+		  print("CLOSE");
+		  ws = null;
+              }
+              ws.onmessage = function(evt) {
+		  print("RESPONSE: " + evt.data);
+              }
+              ws.onerror = function(evt) {
+		  print("ERROR: " + evt.data);
+              }
+              return false;
+	  };
+	  document.getElementById("send").onclick = function(evt) {
+              if (!ws) {
+		  return false;
+              }
+              print("REQUEST: " + input.value);
+              ws.send(input.value);
+              return false;
+	  };
+	  document.getElementById("close").onclick = function(evt) {
+              if (!ws) {
+		  return false;
+              }
+              ws.close();
+              return false;
+	  };
+      });
+    </script>
+  </head>
+  <body>
+    <p>
+      Click "Open" to create a connection to the server, 
+      "Send" to send a message to the server and "Close" to close the connection. 
+      You can change the message and send multiple times.
+    </p>
+    <div id="output" style="max-height: 70vh;overflow-y: scroll;"></div>
+    <br/>
+    <button id="open">Open</button>
+    <button id="close">Close</button>
+    <br/><br/>
+    <textarea id="input" rows="10" cols="70"></textarea>
+    <br/>
+    <button id="send">Send</button>
+    <xmp>
+{
+  "id": "check_connection",
+  "request": "Ping"
+}
+    </xmp>
+    <xmp>
+{
+  "id": "block_stream",
+  "request": "SubscribeBlock",
+  "body": {
+    "blockNumber": 0
+  }
+}
+    </xmp>
+    <xmp>
+{
+  "id": "tran_stream",
+  "request": "SubscribeTransaction",
+  "body": {
+    "blockNumber": 0,
+    "transactionIndex": 0,
+    "address": "0x8392cC23181b4C243547cD1A25801E2AA738Ee59"
+  }
+}
+    </xmp>
+    <xmp>     
+{
+  "id": "a_token_stream",
+  "request": "SubscribeContractEvent",
+  "body": {
+    "blockNumber": 260000,
+    "transactionIndex": 0,
+    "logIndex": 0,
+    "address": ["0x376A4849b46B5cDcd55517FF0B6ccAb4fe27Ec11"],
+    "events": ["Registered"],
+    "filter": {
+        "email": "saman.h.pasha@gmail.com"
+    }
+  }
+}
+    </xmp>
+    <xmp>     
+{
+  "id": "an_offchain_stream",
+  "request": "SubscribeOffChainEvent",
+  "body": {
+    "address": ["0x37dD4dEa479dBA7BE52c9f8956e3d3fCfC8268D5"],
+    "events": ["MailSent"]
+  }
+}
+    </xmp>
+    <xmp>
+{
+  "id": "block_stream",
+  "request": "Cancel"
+}
+    </xmp>
+  </body>
+</html>

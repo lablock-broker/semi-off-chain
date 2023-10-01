@@ -1,0 +1,171 @@
+[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "person",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "group",
+				"type": "string"
+			}
+		],
+		"name": "PersonAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "person",
+				"type": "address"
+			}
+		],
+		"name": "PersonRemoved",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "person",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "group",
+				"type": "string"
+			}
+		],
+		"name": "addToGroup",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "person",
+				"type": "address"
+			}
+		],
+		"name": "groupOf",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "person",
+				"type": "address"
+			}
+		],
+		"name": "removeFromGroup",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "wallet",
+								"type": "address"
+							}
+						],
+						"internalType": "struct Mailer.Person",
+						"name": "from",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "wallet",
+								"type": "address"
+							}
+						],
+						"internalType": "struct Mailer.Person",
+						"name": "to",
+						"type": "tuple"
+					},
+					{
+						"internalType": "string",
+						"name": "contents",
+						"type": "string"
+					}
+				],
+				"internalType": "struct Mailer.Mail",
+				"name": "mail",
+				"type": "tuple"
+			}
+		],
+		"name": "validateMail",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "offcahin_event",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "from_group",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "to_group",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
